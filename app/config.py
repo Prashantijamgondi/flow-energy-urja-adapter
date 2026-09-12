@@ -18,7 +18,7 @@ class Settings:
 
     # TODO: fill in once observed - some SvelteKit/Next apps use a different
     # session cookie name than the framework default
-    SESSION_COOKIE_NAME: str = os.getenv("URJA_SESSION_COOKIE", "session")
+    SESSION_COOKIE_NAME: str = os.getenv("URJA_SESSION_COOKIE", "__Secure-better-auth.session_token")
 
     REQUEST_TIMEOUT: float = float(os.getenv("URJA_TIMEOUT", "10.0"))
     CACHE_TTL_SECONDS: int = int(os.getenv("CACHE_TTL_SECONDS", "60"))

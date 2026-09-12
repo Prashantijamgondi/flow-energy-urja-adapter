@@ -28,26 +28,15 @@ class UrjaPortalClient:
         self._last_login_at: Optional[datetime] = None
 
     def login(self, username: str, password: str) -> bool:
-        """
-        TODO: confirm against DevTools:
-        - Exact login URL (settings.LOGIN_PATH)
-        - Is payload form-encoded (`data=`) or JSON (`json=`)?
-        - Any CSRF token that must be fetched first via a GET to the login page
-          and re-submitted (common pattern: hidden <input name="csrf_token">)?
-        - Does a successful login return 200 with a Set-Cookie, or a 302 redirect?
-        """
         login_url = f"{self.base_url}{settings.LOGIN_PATH}"
 
-        # If a CSRF token is required, fetch the login page first:
-        # csrf_page = self.client.get(login_url)
-        # soup = BeautifulSoup(csrf_page.text, "html.parser")
-        # token_input = soup.find("input", {"name": "csrf_token"})
-        # csrf_token = token_input["value"] if token_input else None
+        payload = {"email": username, "password": password}
+        headers = {
+            "Origin": self.base_url,
+            "Referer": login_url
+        }
 
-        payload = {"username": username, "password": password}
-        # payload["csrf_token"] = csrf_token  # uncomment if needed
-
-        response = self.client.post(login_url, data=payload)  # or json=payload
+        response = self.client.post(login_url, data=payload, headers=headers)
 
         ok = response.status_code in (200, 302) and (
             settings.SESSION_COOKIE_NAME in self.client.cookies
